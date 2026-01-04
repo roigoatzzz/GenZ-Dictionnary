@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Gen Z & Brainrot Bible 2026</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Importing Syne (Vibey headers) and Outfit (Clean body) */
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Syne:wght@400;700;800&display=swap');
+
+        :root {
+            --bg-color: #050505;
+            --text-main: #ededed;
+            --text-muted: #9ca3af;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --card-hover-border: rgba(168, 85, 247, 0.5);
+            --pill-bg: rgba(255, 255, 255, 0.05);
+            --pill-border: rgba(255, 255, 255, 0.1);
+            --accent: #9333ea;
+            --input-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        body.light-mode {
+            --bg-color: #f3f4f6;
+            --text-main: #111827;
+            --text-muted: #4b5563;
+            --card-bg: #ffffff;
+            --card-border: #e5e7eb;
+            --card-hover-border: #9333ea;
+            --pill-bg: #ffffff;
+            --pill-border: #d1d5db;
+            --accent: #7e22ce;
+            --input-bg: #ffffff;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        h1,
+        h2,
+        h3 {
+            font-family: 'Syne', sans-serif;
+        }
+
+        .glass {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
+        }
+
+        body.light-mode .glass {
+            backdrop-filter: none;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .glow-hover:hover {
+            border-color: var(--card-hover-border);
+            transform: translateY(-2px);
+        }
+
+        body:not(.light-mode) .glow-hover:hover {
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.3);
+        }
+
+        body.light-mode .glow-hover:hover {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-pill {
+            transition: all 0.2s;
+            cursor: pointer;
+            white-space: nowrap;
+            background: var(--pill-bg);
+            border: 1px solid var(--pill-border);
+            color: var(--text-main);
+        }
+
+        .category-pill:hover {
+            border-color: var(--accent);
+        }
+
+        .category-pill.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(147, 51, 234, 0.4);
+        }
+
+        .search-input {
+            background-color: var(--input-bg);
+            border-color: var(--card-border);
+            color: var(--text-main);
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 50;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            color: var(--text-main);
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+
+<body class="p-4 md:p-8 min-h-screen">
+
+    <button onclick="toggleTheme()" class="theme-toggle hover:scale-110 transition-transform" aria-label="Toggle Theme">
+        <svg id="moon-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+        <svg id="sun-icon" class="hidden" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+    </button>
+
+    <header class="max-w-4xl mx-auto text-center mb-12 pt-8">
+        <h1 class="text-6xl md:text-8xl font-extrabold mb-4 tracking-tight leading-tight">
+            GEN Z BIBLE
+        </h1>
+        <p class="text-lg opacity-80" style="color: var(--text-muted)">The 2026 Core Edition. <span
+                id="wordCountDisplay">Loading...</span></p>
+
+        <div class="mt-8 flex flex-col md:flex-row gap-4 justify-center">
+            <input type="text" id="searchInput" placeholder="Search for a term or meaning..."
+                class="search-input border rounded-full px-6 py-4 w-full md:w-96 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all font-medium">
+            <button onclick="randomWord()"
+                class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-full font-bold transition-all shadow-lg shadow-purple-500/20 active:scale-95">
+                Random Rizz
+            </button>
+        </div>
+
+        <div id="categoryFilters" class="mt-8 flex flex-wrap justify-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+            <span class="category-pill active px-5 py-2 rounded-full text-sm font-medium" data-category="All">All</span>
+            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium"
+                data-category="Acronym">Acronyms</span>
+            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium" data-category="Core">Core</span>
+            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium"
+                data-category="Brainrot">Brainrot</span>
+            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium" data-category="Action">Verbs</span>
+            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium" data-category="State">Emotions</span>
+            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium" data-category="Aura">Aura</span>
+            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium"
+                data-category="React">Reactions</span>
+            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium" data-category="People">People</span>
+            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium" data-category="Gaming">Gaming</span>
+            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium" data-category="Phrase">Phrases</span>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto pb-20">
+        <div id="dictionaryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Cards will be injected here -->
+        </div>
+    </main>
+
+    <footer class="text-center text-sm pb-10 opacity-60" style="color: var(--text-muted)">
+        <p>The streets never forget. 2026 Verified Data.</p>
+    </footer>
+
+    <script>
+        const slangData = [
+            // --- ACRONYMS / SHORT TALK ---
+            { word: "fr / frfr", category: "Acronym", def: "For Real. Absolute agreement or confirming truth.", ex: "I'm so tired of this school, frfr." },
+            { word: "ngl", category: "Acronym", def: "Not Gonna Lie. Prefacing an honest statement.", ex: "Ngl this pizza is actually mid." },
+            { word: "idk / idc", category: "Acronym", def: "I Don't Know / I Don't Care.", ex: "Idc what she says about me." },
+            { word: "tbh", category: "Acronym", def: "To Be Honest.", ex: "Tbh, I think we should just go home." },
+            { word: "imo", category: "Acronym", def: "In My Opinion.", ex: "Imo, the first movie was better." },
+            { word: "btw", category: "Acronym", def: "By The Way.", ex: "Btw, did you see his latest post?" },
+            { word: "rn", category: "Acronym", def: "Right Now.", ex: "I can't talk rn, I'm locked in." },
+            { word: "af", category: "Acronym", def: "As F***. Used for intense emphasis.", ex: "I'm hungry af." },
+            { word: "smh", category: "Acronym", def: "Shaking My Head. Used for disappointment or disbelief.", ex: "He really forgot his keys again? smh." },
+            { word: "ikr", category: "Acronym", def: "I Know, Right? Agreement.", ex: "Ikr? It's literally so hot outside." },
+            { word: "pov", category: "Acronym", def: "Point of View. Contextualizing a perspective or meme.", ex: "POV: You're 5 minutes late to class." },
+            { word: "irl", category: "Acronym", def: "In Real Life.", ex: "He's actually shorter irl." },
+            { word: "fyp", category: "Acronym", def: "For You Page. The TikTok main feed.", ex: "I saw your video on my fyp!" },
+            { word: "w / l", category: "Acronym", def: "Win / Loss. Success vs. Failure.", ex: "Dropped my ice cream. Massive L." },
+            { word: "mid", category: "Acronym", def: "Mediocre. Neither good nor bad, just average.", ex: "The new album is mid." },
+            { word: "iykyk", category: "Acronym", def: "If You Know, You Know. Inside joke indicator.", ex: "The party last night... iykyk." },
+            { word: "no cap / cap", category: "Acronym", def: "No Lie / Lie.", ex: "I can jump that far, no cap." },
+            { word: "stg / istg", category: "Acronym", def: "Swear To God / I Swear To God.", ex: "Istg if he cancels again I'm done." },
+            { word: "ong", category: "Acronym", def: "On God. Telling the truth / seriously.", ex: "That was the best burger ever, ong." },
+            { word: "wsg", category: "Acronym", def: "What's Good? How are you?", ex: "Wsg bro, haven't seen you in a minute." },
+            { word: "wym", category: "Acronym", def: "What You Mean?", ex: "Wym you're not coming?" },
+            { word: "hmu", category: "Acronym", def: "Hit Me Up. Contact me.", ex: "Hmu later if you wanna game." },
+            { word: "ootd", category: "Acronym", def: "Outfit Of The Day.", ex: "Check out my OOTD." },
+            { word: "grwm", category: "Acronym", def: "Get Ready With Me.", ex: "Filming a GRWM for the concert." },
+            { word: "nsfw", category: "Acronym", def: "Not Safe For Work. Risky content.", ex: "Don't open that here, it's NSFW." },
+
+            // --- CORE EXPRESSIONS ---
+            { word: "slay", category: "Core", def: "To do something exceptionally well or look great.", ex: "You slayed that presentation." },
+            { word: "bet", category: "Core", def: "Affirmative agreement. 'Okay' or 'Yes'.", ex: "A: 'Wanna go?' B: 'Bet.'" },
+            { word: "bruh", category: "Core", def: "Universal exclamation for shock, annoyance, or 'really?'.", ex: "Bruh, why would you say that?" },
+            { word: "bro", category: "Core", def: "Universal address for anyone (regardless of gender).", ex: "Bro thinks he's the main character." },
+            { word: "deadass", category: "Core", def: "Seriously / For real.", ex: "I'm deadass about to quit." },
+            { word: "lowkey / highkey", category: "Core", def: "Secretly / Openly or subtly / intensely.", ex: "I lowkey like him but highkey hate his shoes." },
+            { word: "sus", category: "Core", def: "Suspicious. Short for 'suspect'.", ex: "That link looks xus, don't click it." },
+            { word: "cooked", category: "Core", def: "In trouble, doomed, or mentally exhausted.", ex: "If I miss this bus I'm cooked." },
+            { word: "cringe", category: "Core", def: "Second-hand embarrassment.", ex: "The joke was so cringe I couldn't look." },
+            { word: "based", category: "Core", def: "Being yourself and not caring what people think; a bold, true opinion.", ex: "Truly based take." },
+            { word: "flop", category: "Core", def: "A failure. Often used for unsuccessful music or eras.", ex: "Her new era is a total flop." },
+            { word: "viral", category: "Core", def: "Spreading rapidly across the internet.", ex: "That cat video went viral overnight." },
+            { word: "ratio", category: "Core", def: "When a reply gets more likes than the original post (showing they lost).", ex: "Common ratio on Twitter." },
+            { word: "unserious", category: "Core", def: "Dismissing a situation as absurd or not to be taken literally.", ex: "This whole drama is so unserious." },
+            { word: "deeply unserious", category: "Core", def: "Peak levels of absurdity or refusal to be professional/mature.", ex: "The CEO posting memes is deeply unserious." },
+            { word: "rent free", category: "Core", def: "Thinking about something constantly.", ex: "That song lives in my head rent free." },
+            { word: "caught in 4k", category: "Core", def: "Caught red-handed with clear evidence.", ex: "He said he wasn't there but he got caught in 4k." },
+            { word: "period / periodt", category: "Core", def: "End of discussion. Emphasizing a point.", ex: "And that's on that, periodt." },
+            { word: "sheesh", category: "Core", def: "Expression of hype or disbelief.", ex: "Sheesh! Look at those shoes." },
+            { word: "bussin", category: "Core", def: "Really delicious (food).", ex: "This chipotle is bussin." },
+            { word: "valid", category: "Core", def: "Acceptable, reasonable, or looking good.", ex: "That excuse is actually valid." },
+            { word: "finna", category: "Core", def: "Going to / Planning to.", ex: "I'm finna head out." },
+            { word: "yeet", category: "Core", def: "To throw something with force.", ex: "He yeeted the empty can." },
+            { word: "tea", category: "Core", def: "Gossip or scoop.", ex: "Spill the tea, what happened?" },
+            { word: "shade", category: "Core", def: "Subtle insults or disrespect.", ex: "She threw so much shade at him." },
+            { word: "gagged", category: "Core", def: "Shocked, impressed, or rendered speechless.", ex: "Her outfit gagged everyone at the party." },
+            { word: "ate", category: "Core", def: "Did something perfectly.", ex: "She ate that choreography." },
+            { word: "mother", category: "Core", def: "An iconic female figure/celebrity.", ex: "Lady Gaga is mother." },
+            { word: "slaps", category: "Core", def: "Is really good (usually music).", ex: "This beat slaps hard." },
+            { word: "hits different", category: "Core", def: "Feels better or more special than usual.", ex: "Water at 3am hits different." },
+            { word: "sleep on", category: "Core", def: "To underestimate or ignore something good.", ex: "Don't sleep on this new anime." },
+            { word: "gatekeep", category: "Core", def: "Withholding info to keep it exclusive.", ex: "Stop gatekeeping where you got that shirt." },
+            { word: "gaslight", category: "Core", def: "Manipulating someone to question their reality.", ex: "He's trying to gaslight me into thinking I'm crazy." },
+            { word: "girlboss", category: "Core", def: "Empowered woman (often ironic).", ex: "She's gaslight, gatekeep, girlbossing her way to the top." },
+            { word: "canon event", category: "Core", def: "Unavoidable event necessary for character development.", ex: "Getting your heart broken is a canon event." },
+            { word: "standing on business", category: "Core", def: "Sticking to your principles or getting things done.", ex: "He's not replying, he's standing on business." },
+            { word: "clout", category: "Core", def: "Fame, influence, or social power.", ex: "He just did it for the clout." },
+            { word: "fire", category: "Core", def: "Really good/cool.", ex: "That fit is fire." },
+            { word: "lit", category: "Core", def: "Exciting or fun.", ex: "The party was lit." },
+
+            // --- BRAINROT (MAINSTREAM) ---
+            { word: "rizz", category: "Brainrot", def: "Charisma, specifically in romantic pursuit.", ex: "Bro has negative rizz." },
+            { word: "unspoken rizz", category: "Brainrot", def: "Attracting people without even saying anything.", ex: "He stood there and she blushed, pure unspoken rizz." },
+            { word: "rizzler", category: "Brainrot", def: "A master of rizz.", ex: "Call him the Rizzler." },
+            { word: "npc", category: "Brainrot", def: "Someone who acts like a background character with no original thought.", ex: "He's just standing there like an NPC." },
+            { word: "ohio", category: "Brainrot", def: "A synonym for 'weird' or 'cursed'.", ex: "Only in Ohio bruh." },
+            { word: "gyatt", category: "Brainrot", def: "Exclamation used when seeing someone with a large backside.", ex: "Level 10 Gyatt." },
+            { word: "fanum tax", category: "Brainrot", def: "Stealing a bite of a friend's food.", ex: "Give me that Fanum tax on those fries." },
+            { word: "skibidi", category: "Brainrot", def: "The ultimate nonsense brainrot word. Means nothing and everything.", ex: "Skibidi rizz in Ohio." },
+            { word: "sigma", category: "Brainrot", def: "The 'lone wolf' archetype. Often used ironically.", ex: "He's such a sigma male." },
+            { word: "alpha", category: "Brainrot", def: "Dominant leader type (ironic).", ex: "Bro thinks he's the alpha of the group." },
+            { word: "beta", category: "Brainrot", def: "Weak or submissive (ironic).", ex: "Stop being such a beta." },
+            { word: "uncanny", category: "Brainrot", def: "Disturbing or creepy in a way that feels 'off'.", ex: "The Mr. Incredible uncanny meme." },
+            { word: "brainrot", category: "Brainrot", def: "Content so loud and senseless it feels like your brain is rotting.", ex: "I've been scrolling brainrot for 2 hours." },
+            { word: "ai slop", category: "Brainrot", def: "Low-quality, mass-produced AI content flooding social feeds.", ex: "My Facebook feed is just AI slop now." },
+            { word: "noise", category: "Brainrot", def: "Irrelevant or low-value information; chaos used for humor.", ex: "That video was just pure noise." },
+            { word: "slop", category: "Brainrot", def: "Generic, low-effort content designed just to get views.", ex: "Feeding the timeline with daily slop." },
+            { word: "mewing", category: "Brainrot", def: "Tongue posture technique to define jawline. Usually signaled by 'shhh' finger.", ex: "Can't talk, I'm mewing." },
+            { word: "looksmaxxing", category: "Brainrot", def: "Obsessively trying to improve physical appearance.", ex: "He's been looksmaxxing for 6 months." },
+            { word: "mog / mogged", category: "Brainrot", def: "To dominate someone physically or visually (look better than them).", ex: "He got mogged by the guy next to him." },
+            { word: "edge / edging", category: "Brainrot", def: "Stopping just before completion (often used for suspense/brainrot context).", ex: "I'm edging my limit right now." },
+            { word: "baby gronk", category: "Brainrot", def: "Viral football kid personality.", ex: "Baby Gronk rizzing up Livvy Dunne." },
+            { word: "grimace shake", category: "Brainrot", def: "Viral trend involving the purple McDonald's shake.", ex: "Happy birthday Grimace!" },
+            { word: "backrooms", category: "Brainrot", def: "Liminal spaces that feel cursed/empty.", ex: "I clipped into the backrooms." },
+            { word: "shadow wizard money gang", category: "Brainrot", def: "Nonsense meme phrase usually followed by 'we love casting spells'.", ex: "Shadow wizard money gang for life." },
+            { word: "tweaking", category: "Brainrot", def: "Acting crazy, high, or glitching out.", ex: "Bro is tweaking right now." },
+            { word: "geeking", category: "Brainrot", def: "Laughing uncontrollably or acting high.", ex: "We were geeking at that joke." },
+
+            // --- ACTIONS / VERBS ---
+            { word: "cooking", category: "Action", def: "Doing something well or working on a great idea.", ex: "Wait, let him cook." },
+            { word: "serving", category: "Action", def: "Delivering a great look or vibe.", ex: "She is serving face today." },
+            { word: "vibing", category: "Action", def: "Relaxing and enjoying the atmosphere.", ex: "We're just vibing at the beach." },
+            { word: "yapping", category: "Action", def: "Talking way too much about nothing.", ex: "Stop yapping and get to the point." },
+            { word: "glazing", category: "Action", def: "Over-complimenting someone to a cringey degree.", ex: "The glazing in the comments is crazy." },
+            { word: "simping", category: "Action", def: "Doing too much for someone you have a crush on.", ex: "He's simping so hard for her." },
+            { word: "ghosting", category: "Action", def: "Stopping all communication without explanation.", ex: "I got ghosted after the first date." },
+            { word: "doomscrolling", category: "Action", def: "Endlessly scrolling through bad or addictive news.", ex: "I was doomscrolling till 4am." },
+            { word: "crashing out", category: "Action", def: "Losing your temper or control in a reckless way.", ex: "He's about to crash out over that game." },
+            { word: "aura farming", category: "Action", def: "Doing things specifically to look cool and gain social points.", ex: "Saving a puppy is major aura farming." },
+            { word: "rage baiting", category: "Action", def: "Posting something infuriating just to get comments.", ex: "That's clearly rage bait to get views." },
+            { word: "hate watching", category: "Action", def: "Watching a show you despise just to mock it.", ex: "I'm hate watching the finale right now." },
+            { word: "fumbled", category: "Action", def: "Ruined a chance with someone or something.", ex: "He had a chance with her but he fumbled." },
+            { word: "clutching", category: "Action", def: "Winning or succeeding under pressure.", ex: "He's clutching the game right now." },
+            { word: "selling", category: "Action", def: "Ruining the team's chance to win.", ex: "Stop selling and focus!" },
+            { word: "throwing", category: "Action", def: "Losing on purpose or playing very badly.", ex: "He's throwing the match." },
+            { word: "glitching", category: "Action", def: "Malfunctioning or acting weird.", ex: "My brain is glitching today." },
+            { word: "spiraling", category: "Action", def: "Mental state getting progressively worse.", ex: "I'm spiraling over this exam." },
+            { word: "gatekeeping", category: "Action", def: "Preventing others from accessing something.", ex: "Why are you gatekeeping the playlist?" },
+            { word: "hard launch", category: "Action", def: "Suddenly revealing a partner on social media.", ex: "She hard launched her boyfriend yesterday." },
+            { word: "soft launch", category: "Action", def: "Subtly hinting at a partner on social media.", ex: "That elbow in the photo? Classic soft launch." },
+            { word: "breadcrumbing", category: "Action", def: "Giving just enough attention to keep someone interested.", ex: "He's just breadcrumbing you, move on." },
+            { word: "love bombing", category: "Action", def: "Overwhelming someone with affection to manipulate them.", ex: "Be careful, that might be love bombing." },
+            { word: "motion", category: "Action", def: "Having things going for you; making money or progress.", ex: "He's got real motion in the city." },
+
+            // --- EMOTIONS / STATES ---
+            { word: "delulu", category: "State", def: "Delusional. Usually about a crush or a dream.", ex: "I'm being delulu thinking he'll text back." },
+            { word: "solulu", category: "State", def: "Solution. 'Delulu is the solulu'.", ex: "Being delulu is the only solulu." },
+            { word: "feral", category: "State", def: "Wild, unhinged, and totally unbothered by social norms.", ex: "I'm going feral over this new song." },
+            { word: "unhinged", category: "State", def: "Erratic, crazy, or wildly creative behavior.", ex: "The Duolingo bird is unhinged." },
+            { word: "locked in", category: "State", def: "Completely focused and in the zone.", ex: "I'm locked in for finals week." },
+            { word: "dissociating", category: "State", def: "Checking out mentally; staring into space.", ex: "Me dissociating during the 3-hour lecture." },
+            { word: "healing era", category: "State", def: "A period spent focusing on mental health and growth.", ex: "I'm in my healing era, no drama please." },
+            { word: "cooked (mentally)", category: "State", def: "Exhausted to the point of brain malfunction.", ex: "After that 5-hour study session, I'm cooked." },
+            { word: "core memory", category: "State", def: "A significant moment that will stay with you forever.", ex: "That concert is a core memory now." },
+            { word: "down bad", category: "State", def: "Desperately attracted to someone or in a bad situation.", ex: "He is down bad for her." },
+            { word: "down horrendous", category: "State", def: "Extremely down bad.", ex: "Checking her location? You're down horrendous." },
+            { word: "pressed", category: "State", def: "Stressed, upset, or angry.", ex: "Why are you so pressed about it?" },
+            { word: "salty", category: "State", def: "Bitter or upset.", ex: "He's salty he lost." },
+            { word: "tilting", category: "State", def: "Getting angry/frustrated (usually gaming).", ex: "I'm tilting so hard right now." },
+            { word: "cuffed", category: "State", def: "In a committed relationship.", ex: "He got cuffed for the winter." },
+            { word: "maidenless", category: "State", def: "Having no girlfriend (Elden Ring ref).", ex: "Truly maidenless behavior." },
+            { word: "fatherless", category: "State", def: "Acting without guidance or morals (insult).", ex: "That's fatherless behavior." },
+
+            // --- VIBES / AURA ---
+            { word: "aura", category: "Aura", def: "Cool points / Presence. Can be gained or lost (+1000 aura).", ex: "Clutching that 1v4 gave him +5000 aura." },
+            { word: "presence", category: "Aura", def: "The weight or vibe someone carries in a room.", ex: "His presence is actually intimidating." },
+            { word: "aesthetic", category: "Aura", def: "A specific visual style or 'look'.", ex: "That cafe has a great aesthetic." },
+            { word: "core", category: "Aura", def: "A suffix for a specific niche aesthetic (e.g. Goblincore).", ex: "This outfit is so cottagecore." },
+            { word: "main character", category: "Aura", def: "Someone who acts like the protagonist of life.", ex: "She has massive main character energy." },
+            { word: "villain era", category: "Aura", def: "A phase of putting yourself first and not caring about being 'nice'.", ex: "I'm entering my villain era." },
+            { word: "soft life", category: "Aura", def: "A lifestyle of comfort, ease, and minimal stress.", ex: "I just want a soft life and a garden." },
+            { word: "grindset", category: "Aura", def: "A mindset focused purely on work and success (often ironic).", ex: "Sigma grindset: wake up at 4am." },
+            { word: "quiet luxury", category: "Aura", def: "Wearing expensive things that don't have loud logos.", ex: "She's giving quiet luxury with that coat." },
+            { word: "old money", category: "Aura", def: "Aesthetic based on inherited wealth (preppy, timeless).", ex: "The Hamptons are very old money." },
+            { word: "dopamine dressing", category: "Aura", def: "Wearing bright colors to intentionally boost your mood.", ex: "Dopamine dressing for a rainy day." },
+            { word: "cheugy", category: "Aura", def: "Out of style / Trying too hard (Millennial aesthetic).", ex: "Skinny jeans are so cheugy now." },
+            { word: "drip", category: "Aura", def: "Stylish outfit or accessories.", ex: "Respect the drip." },
+            { word: "swag", category: "Aura", def: "Style/Coolness (Dated but sometimes ironic).", ex: "He's got swag." },
+            { word: "clean", category: "Aura", def: "Looking sharp and tidy.", ex: "That fade is clean." },
+            { word: "snatched", category: "Aura", def: "Looking perfect (usually waist or makeup).", ex: "Her waist is snatched." },
+            { word: "cursed", category: "Aura", def: "Unsettling or wrong.", ex: "That image is cursed." },
+            { word: "blursed", category: "Aura", def: "Blessed + Cursed. Weird but kinda good.", ex: "A blursed image." },
+            { word: "wholesome", category: "Aura", def: "Pure, kind, and good.", ex: "This video is so wholesome." },
+            { word: "liminal", category: "Aura", def: "Eerie, transitional, empty feel.", ex: "This empty mall is so liminal." },
+            { word: "stargazing", category: "Aura", def: "Looking at the bigger picture or having lofty dreams.", ex: "She's in her stargazing era." },
+            { word: "vibe shift", category: "Aura", def: "When the general social mood changes significantly.", ex: "There's been a major vibe shift lately." },
+
+            // --- REACTIONS / INSULTS ---
+            { word: "goofy", category: "React", def: "Silly, ridiculous, or acting like a clown.", ex: "Stop being goofy and be serious." },
+            { word: "corny", category: "React", def: "Cheesy, uncool, or trying too hard to be deep.", ex: "That motivational quote was so corny." },
+            { word: "touch grass", category: "React", def: "Go outside. You are too online/detached from reality.", ex: "You're mad about a tweet? Touch grass." },
+            { word: "be serious", category: "React", def: "Used when someone says something ridiculous.", ex: "You think you can jump that? Be serious." },
+            { word: "ain't no way", category: "React", def: "Exclamation of pure disbelief.", ex: "Ain't no way he just did that." },
+            { word: "side eye", category: "React", def: "A look of judgment or suspicion.", ex: "Giving him the side eye." },
+            { word: "bombastic side eye", category: "React", def: "Extreme judgment.", ex: "Criminal offensive side eye." },
+            { word: "big yikes", category: "React", def: "Major cringe or bad situation.", ex: "He asked her out and she ran? Big yikes." },
+            { word: "oof", category: "React", def: "Sympathy for pain or a mistake.", ex: "Oof, that looked painful." },
+            { word: "skill issue", category: "React", def: "Dismissive way to say 'you're just bad at this'.", ex: "Died to the boss again? Skill issue." },
+            { word: "l + ratio", category: "React", def: "You lose and your opinion is unpopular.", ex: "L + Ratio + Bozo." },
+            { word: "copium", category: "React", def: "Lying to yourself to cope with a loss.", ex: "He thinks he can still win? Pure copium." },
+            { word: "hopium", category: "React", def: "Irrational hope.", ex: "I'm high on hopium that the game releases today." },
+            { word: "seethe", category: "React", def: "Stay angry.", ex: "Cope and seethe." },
+            { word: "mald", category: "React", def: "Mad + Bald. So mad you're losing hair.", ex: "He's malding over the update." },
+            { word: "ok boomer", category: "React", def: "Dismissing an older person's opinion.", ex: "Technology is bad? Ok boomer." },
+            { word: "karen", category: "React", def: "Entitled, demanding woman.", ex: "Don't be such a Karen." },
+            { word: "bot", category: "React", def: "Someone acting stupid or playing badly.", ex: "Are you a bot?" },
+
+            // --- PEOPLE / DATING ---
+            { word: "pick-me", category: "People", def: "Someone who tries too hard to be 'not like others' for validation.", ex: "She's such a pick-me girl." },
+            { word: "opp", category: "People", def: "Opposition. Someone you are beefing with.", ex: "I saw my opps at the mall." },
+            { word: "situationship", category: "People", def: "A romantic relationship that isn't officially defined.", ex: "We've been in a situationship for 8 months." },
+            { word: "red flag", category: "People", def: "Warning sign.", ex: "He doesn't like dogs? Major red flag." },
+            { word: "green flag", category: "People", def: "Positive trait.", ex: "He calls his mom? Green flag." },
+            { word: "beige flag", category: "People", def: "A trait that is neither good nor bad, just boring or weirdly neutral.", ex: "His beige flag is he only eats plain toast." },
+            { word: "walking ick / ick", category: "People", def: "Someone who constantly does things that repulse others.", ex: "He's a walking ick." },
+            { word: "baddie", category: "People", def: "An attractive, confident woman.", ex: "She's a total baddie." },
+            { word: "zaddy", category: "People", def: "Attractive older man with style/money.", ex: "Pedro Pascal is zaddy." },
+            { word: "stan", category: "People", def: "Obsessive fan (Stalker + Fan).", ex: "I stan Taylor Swift." },
+            { word: "pookie", category: "People", def: "Cute nickname for a friend or partner.", ex: "Hey pookie!" },
+            { word: "bestie", category: "People", def: "Best friend (used loosely).", ex: "Bestie, you won't believe this." },
+            { word: "mutuals / moots", category: "People", def: "People who follow each other on social media.", ex: "One of my moots posted this." },
+            { word: "oomf", category: "People", def: "One Of My Followers.", ex: "Oomf said I look good." },
+            { word: "blud", category: "People", def: "Bro/Guy (UK slang).", ex: "What is blud doing?" },
+            { word: "mandem", category: "People", def: "Group of friends/men (UK slang).", ex: "Out with the mandem." },
+            { word: "roadman", category: "People", def: "Tough guy archetype (UK slang).", ex: "He thinks he's a roadman." },
+            { word: "chav", category: "People", def: "UK subculture stereotype.", ex: "Proper chav behavior." },
+            { word: "eshay", category: "People", def: "Australian youth subculture (mullets/sportswear).", ex: "Look at those eshays." },
+            { word: "zoomer", category: "People", def: "Member of Gen Z.", ex: "Typical zoomer humor." },
+            { word: "zalpha", category: "People", def: "Cusp generation between Z and Alpha.", ex: "My little sister is a Zalpha." },
+            { word: "ipad kid", category: "People", def: "Child raised by screens, lacks attention span.", ex: "Stop screaming, you iPad kid." },
+
+            // --- GAMING / STREAM ---
+            { word: "op", category: "Gaming", def: "Overpowered. Too strong to be fair.", ex: "That new weapon is so op." },
+            { word: "meta", category: "Gaming", def: "The most effective current strategy or trend.", ex: "Using that character is the current meta." },
+            { word: "sweaty", category: "Gaming", def: "Trying way too hard in a casual environment.", ex: "Why are you being so sweaty in a friendly match?" },
+            { word: "smurf", category: "Gaming", def: "High-level player using a low-level account.", ex: "The enemy team definitely has a smurf." },
+            { word: "diff", category: "Gaming", def: "Difference in skill between roles.", ex: "Jungle diff." },
+            { word: "inting", category: "Gaming", def: "Intentionally feeding (dying on purpose).", ex: "Stop inting!" },
+            { word: "griefing", category: "Gaming", def: "Harassing teammates or ruining the game.", ex: "He got banned for griefing." },
+            { word: "tank", category: "Gaming", def: "To take damage for the team.", ex: "Tank the boss for us." },
+            { word: "one-shot", category: "Gaming", def: "Kill in one hit / Very low health.", ex: "He's one-shot! Hit him!" },
+            { word: "nerf", category: "Gaming", def: "To weaken a character/item.", ex: "They need to nerf that gun." },
+            { word: "buff", category: "Gaming", def: "To strengthen a character/item.", ex: "They buffed my main character." },
+            { word: "spawn camp", category: "Gaming", def: "Waiting at the enemy spawn to kill them instantly.", ex: "Stop spawn camping, it's cheap." },
+            { word: "gg", category: "Gaming", def: "Good Game.", ex: "GG WP (Well Played)." },
+            { word: "ez", category: "Gaming", def: "Easy. Disrespectful win.", ex: "GG EZ." },
+            { word: "lag", category: "Gaming", def: "Slow internet connection.", ex: "I'm lagging so bad." },
+            { word: "ping", category: "Gaming", def: "Latency measurement.", ex: "My ping is 900." },
+            { word: "pog / poggers", category: "Gaming", def: "Excitement (Twitch emote).", ex: "That play was poggers." },
+            { word: "monkas", category: "Gaming", def: "Nervous/Sweating (Twitch emote).", ex: "1 HP left, MonkaS." },
+            { word: "sadge", category: "Gaming", def: "Sadness (Twitch emote).", ex: "No stream today, Sadge." },
+            { word: "pepega", category: "Gaming", def: "Stupid/Clueless (Twitch emote).", ex: "He missed the jump, Pepega." },
+            { word: "kek", category: "Gaming", def: "LOL (World of Warcraft origin).", ex: "Kek w." },
+            { word: "f", category: "Gaming", def: "Press F to pay respects.", ex: "Can we get an F in the chat?" },
+
+            // --- PHRASES ---
+            { word: "it's giving ___", category: "Phrase", def: "It has the vibe of / It reminds me of.", ex: "It's giving 90s fashion." },
+            { word: "be so fr", category: "Phrase", def: "Be so for real. Stop joking or lying.", ex: "You're actually going? Be so fr." },
+            { word: "you ate", category: "Phrase", def: "You did a fantastic job.", ex: "You ate that performance." },
+            { word: "i fear", category: "Phrase", def: "Used to introduce a bold or unfortunate truth.", ex: "I fear I'm the best at this." },
+            { word: "this altered my brain chemistry", category: "Phrase", def: "This experience was so intense it changed me.", ex: "That movie altered my brain chemistry." },
+            { word: "for legal reasons this is a joke", category: "Phrase", def: "Used after saying something wild.", ex: "I hate my boss... for legal reasons this is a joke." },
+            { word: "math isn't mathing", category: "Phrase", def: "Something doesn't add up or make sense.", ex: "The budget for this party... the math isn't mathing." },
+            { word: "let him cook", category: "Phrase", def: "Let him do his thing/finish his point.", ex: "Hold on, let him cook." },
+            { word: "hol up", category: "Phrase", def: "Wait a minute.", ex: "Hol up, repeat that." },
+            { word: "say less", category: "Phrase", def: "I understand/agree immediately.", ex: "You want tacos? Say less." },
+            { word: "we move", category: "Phrase", def: "We keep going despite setbacks.", ex: "Failed the test but we move." },
+            { word: "it is what it is", category: "Phrase", def: "Acceptance of a bad situation.", ex: "Lost my wallet. It is what it is." },
+            { word: "sunday scaries", category: "Phrase", def: "Anxiety felt on Sunday before the work week.", ex: "The Sunday scaries are hitting hard." },
+            { word: "quiet quitting", category: "Phrase", def: "Doing the bare minimum at work.", ex: "I'm quiet quitting this job." },
+            { word: "act your wage", category: "Phrase", def: "Work only as hard as you are paid.", ex: "Don't stress, act your wage." },
+            { word: "wig snatched", category: "Phrase", def: "Blown away/Amazed.", ex: "That performance got my wig snatched." },
+            { word: "hits the spot", category: "Phrase", def: "Exactly what was needed.", ex: "This iced coffee hits the spot." },
+            { word: "living rent free", category: "Phrase", def: "Thinking about something constantly.", ex: "He's living rent free in your head." },
+            { word: "main character energy", category: "Phrase", def: "Acting like the star of the show.", ex: "She walked in with main character energy." },
+            { word: "npc energy", category: "Phrase", def: "Acting boring or robotic.", ex: "Stop with the NPC energy." },
+            { word: "spin the block", category: "Phrase", def: "To return to a place or person.", ex: "He's gonna spin the block on his ex." },
+            { word: "left no crumbs", category: "Phrase", def: "Did it perfectly.", ex: "She ate and left no crumbs." },
+            { word: "emotional damage", category: "Phrase", def: "Getting insulted or hurt emotionally.", ex: "That roast was pure emotional damage." },
+            { word: "bomboclaat", category: "Phrase", def: "Jamaican Patois exclamation of shock.", ex: "Bomboclaat! What happened here?" },
+            { word: "wagwan", category: "Phrase", def: "What's going on?", ex: "Wagwan fam." },
+            { word: "innit", category: "Phrase", def: "Isn't it?", ex: "It's cold today, innit?" }
+        ];
+
+        const grid = document.getElementById('dictionaryGrid');
+        const searchInput = document.getElementById('searchInput');
+        const categoryPills = document.querySelectorAll('.category-pill');
+        const countDisplay = document.getElementById('wordCountDisplay');
+        const moonIcon = document.getElementById('moon-icon');
+        const sunIcon = document.getElementById('sun-icon');
+        let currentCategory = 'All';
+
+        // Set the actual count
+
+
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            const isLight = document.body.classList.contains('light-mode');
+
+            if (isLight) {
+                moonIcon.classList.add('hidden');
+                sunIcon.classList.remove('hidden');
+            } else {
+                moonIcon.classList.remove('hidden');
+                sunIcon.classList.add('hidden');
+            }
+        }
+
+        function renderCards() {
+            const searchTerm = searchInput.value.toLowerCase();
+
+            const filtered = slangData.filter(item => {
+                const matchesSearch = item.word.toLowerCase().includes(searchTerm) ||
+                    item.def.toLowerCase().includes(searchTerm);
+
+                const matchesCategory = currentCategory === 'All' || item.category === currentCategory;
+
+                return matchesSearch && matchesCategory;
+            });
+
+            // Update Dynamic Counter
+            if (filtered.length === slangData.length) {
+                countDisplay.innerHTML = `${slangData.length} terms archived.`;
+            } else {
+                countDisplay.innerHTML = `Showing ${filtered.length} of ${slangData.length} terms.`;
+            }
+
+            grid.innerHTML = '';
+            filtered.forEach(item => {
+                let tagClass = 'text-purple-400 border-purple-500/30';
+                if (item.category === 'Acronym') tagClass = 'text-pink-400 border-pink-500/30';
+                if (item.category === 'Brainrot') tagClass = 'text-green-400 border-green-500/30';
+                if (item.category === 'People') tagClass = 'text-red-400 border-red-500/30';
+                if (item.category === 'Gaming') tagClass = 'text-blue-400 border-blue-500/30';
+                if (item.category === 'Phrase') tagClass = 'text-yellow-400 border-yellow-500/30';
+
+                const card = document.createElement('div');
+                card.className = 'glass slang-card p-6 rounded-3xl glow-hover flex flex-col justify-between';
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-start mb-4">
+                            <h2 class="text-2xl font-bold break-words pr-2" style="font-family: 'Syne', sans-serif;">${item.word}</h2>
+                            <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 bg-white/10 rounded-md border ${tagClass} whitespace-nowrap">
+                                ${item.category}
+                            </span>
+                        </div>
+                        <p class="mb-4 leading-relaxed text-sm md:text-base opacity-90">${item.def}</p>
+                    </div>
+                    <div class="mt-4 pt-4 border-t" style="border-color: var(--card-border)">
+                        <p class="text-xs italic opacity-70">"${item.ex}"</p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        searchInput.addEventListener('input', renderCards);
+
+        categoryPills.forEach(pill => {
+            pill.addEventListener('click', () => {
+                categoryPills.forEach(p => p.classList.remove('active'));
+                pill.classList.add('active');
+                currentCategory = pill.getAttribute('data-category');
+                renderCards();
+            });
+        });
+
+        function randomWord() {
+            const random = slangData[Math.floor(Math.random() * slangData.length)];
+            searchInput.value = random.word.split(' /')[0];
+            currentCategory = 'All';
+            categoryPills.forEach(p => p.classList.remove('active'));
+            document.querySelector('[data-category="All"]').classList.add('active');
+            renderCards();
+        }
+
+        renderCards();
+    </script>
+</body>
+
+</html>
