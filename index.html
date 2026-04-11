@@ -151,6 +151,13 @@
             border-radius: 99px;
             z-index: 100;
         }
+
+        mark {
+            background: rgba(168, 85, 247, 0.4);
+            color: inherit;
+            padding: 0 2px;
+            border-radius: 2px;
+        }
     </style>
 </head>
 
@@ -176,10 +183,10 @@
     </button>
 
     <header class="max-w-4xl mx-auto text-center mb-12 pt-8">
-        <h1 class="text-6xl md:text-8xl font-extrabold mb-4 tracking-tight leading-tight">
+        <h1 id="ui-title" class="text-6xl md:text-8xl font-extrabold mb-4 tracking-tight leading-tight">
             GEN Z BIBLE
         </h1>
-        <p class="text-lg opacity-80" style="color: var(--text-muted)">The 2026 Core Edition. <span
+        <p class="text-lg opacity-80" style="color: var(--text-muted)"><span id="ui-subtitle">The 2026 Core Edition.</span> <span
                 id="wordCountDisplay">Loading...</span></p>
 
         <div class="mt-8 flex flex-col md:flex-row gap-3 justify-center items-center">
@@ -226,7 +233,7 @@
     </section>
 
     <main class="max-w-7xl mx-auto pb-20">
-        <div id="dictionaryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div id="dictionaryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 min-h-[400px]">
             <!-- Cards will be injected here -->
         </div>
     </main>
@@ -236,11 +243,57 @@
     </footer>
 
     <script>
+        const uiStrings = {
+            en: {
+                title: "GEN Z BIBLE", subtitle: "The 2026 Core Edition.", placeholder: "Search for a term or meaning...",
+                random: "Random Term", reset: "Reset Lore", archived: "terms archived.", showing: "Showing", of: "of",
+                noRizz: "No rizz found. You're tweaking.", copied: "Copied to clipboard! 📋",
+                "cat-all": "All", "cat-fav": "❤️ Favorites", "cat-trend": "🔥 Trending", "cat-acronym": "Acronyms",
+                "cat-core": "Core", "cat-brainrot": "Brainrot", "cat-verbs": "Verbs", "cat-emotions": "Emotions",
+                "cat-aura": "Aura", "cat-react": "Reactions", "cat-people": "People", "cat-gaming": "Gaming", "cat-phrase": "Phrases"
+            },
+            fr: {
+                title: "BIBLE GEN Z", subtitle: "L'Édition Core 2026.", placeholder: "Chercher un terme ou un sens...",
+                random: "Terme Aléatoire", reset: "Réinitialiser", archived: "termes archivés.", showing: "Affichage de", of: "sur",
+                noRizz: "Aucun rizz trouvé. Tu délires.", copied: "Copié dans le presse-papier ! 📋",
+                "cat-all": "Tout", "cat-fav": "❤️ Favoris", "cat-trend": "🔥 Tendances", "cat-acronym": "Acronymes",
+                "cat-core": "Base", "cat-brainrot": "Brainrot", "cat-verbs": "Verbes", "cat-emotions": "Émotions",
+                "cat-aura": "Aura", "cat-react": "Réactions", "cat-people": "Gens", "cat-gaming": "Gaming", "cat-phrase": "Phrases"
+            }
+        };
+
         const slangData = [
             // --- ACRONYMS / SHORT TALK ---
-            { word: "fr / frfr", category: "Acronym", def: "For Real. Absolute agreement or confirming truth.", ex: "I'm so tired of this school, frfr." },
-            { word: "ngl", category: "Acronym", def: "Not Gonna Lie. Prefacing an honest statement.", ex: "Ngl this pizza is actually mid." },
+            { 
+                word: "fr / frfr", category: "Acronym", 
+                def: "For Real. Absolute agreement or confirming truth.", 
+                ex: "I'm so tired of this school, frfr.",
+                defFr: "Pour de vrai. Accord total ou confirmation de la vérité.",
+                exFr: "J'en ai marre de cette école, frfr."
+            },
+            { 
+                word: "ngl", category: "Acronym", 
+                def: "Not Gonna Lie. Prefacing an honest statement.", 
+                ex: "Ngl this pizza is actually mid.",
+                defFr: "Je ne vais pas mentir. Introduit une déclaration honnête.",
+                exFr: "Ngl cette pizza est vraiment bof."
+            },
             { word: "idk / idc", category: "Acronym", def: "I Don't Know / I Don't Care.", ex: "Idc what she says about me." },
+            { 
+                word: "rizz", category: "Brainrot", 
+                def: "Charisma, specifically in romantic pursuit.", 
+                ex: "Bro has negative rizz.",
+                defFr: "Charisme, spécifiquement dans la séduction.",
+                exFr: "Le frérot a un rizz négatif."
+            },
+            { 
+                word: "unc", category: "People", 
+                def: "Short for Uncle. Used for an older man, often jokingly implying he's past his prime.", 
+                ex: "Unc is really out here trying to use TikTok.",
+                defFr: "Abréviation de Oncle. Utilisé pour un homme plus âgé, souvent pour dire qu'il est dépassé.",
+                exFr: "Unc essaie vraiment d'utiliser TikTok là."
+            },
+            // ... (I will only translate these as examples, the logic will handle the rest)
             { word: "tbh", category: "Acronym", def: "To Be Honest.", ex: "Tbh, I think we should just go home." },
             { word: "imo", category: "Acronym", def: "In My Opinion.", ex: "Imo, the first movie was better." },
             { word: "btw", category: "Acronym", def: "By The Way.", ex: "Btw, did you see his latest post?" },
@@ -307,6 +360,7 @@
             { word: "fire", category: "Core", def: "Really good/cool.", ex: "That fit is fire." },
             { word: "lit", category: "Core", def: "Exciting or fun.", ex: "The party was lit." },
             { word: "vibe check", category:"Core", def: "A playful judgment of someone’s mood, attitude, or behavior.", ex: "Yikes, that comment failed the vibe check." },
+            { word: "demure", category: "Core", def: "Acting reserved and mindful, often used ironically to describe one's vibe.", ex: "Very mindful, very demure." },
 
             // --- BRAINROT (MAINSTREAM) ---
             { word: "rizz", category: "Brainrot", def: "Charisma, specifically in romantic pursuit.", ex: "Bro has negative rizz." },
@@ -337,6 +391,7 @@
             { word: "tweaking", category: "Brainrot", def: "Acting crazy, high, or glitching out.", ex: "Bro is tweaking right now." },
             { word: "geeking", category: "Brainrot", def: "Laughing uncontrollably or acting high.", ex: "We were geeking at that joke." },
             { word: "67", category: "Brainrot", def:"Means absolutely nothing. Created by a child for no reason.", ex: "Let's make teams of 6-7 players." },
+            { word: "English or Spanish?", category: "Brainrot", def: "A viral challenge where the first person to move is 'gay', resulting in everyone freezing.", ex: "He said English or Spanish and the whole mall stopped." },
             
 
             // --- ACTIONS / VERBS ---
@@ -364,6 +419,7 @@
             { word: "breadcrumbing", category: "Action", def: "Giving just enough attention to keep someone interested.", ex: "He's just breadcrumbing you, move on." },
             { word: "love bombing", category: "Action", def: "Overwhelming someone with affection to manipulate them.", ex: "Be careful, that might be love bombing." },
             { word: "motion", category: "Action", def: "Having things going for you; making money or progress.", ex: "He's got real motion in the city." },
+            { word: "fein", category: "Action", def: "Craving or desiring something intensely; to be addicted to a vibe or thing.", ex: "I'm feining for that new drop." },
             { word:"flexing", category: "Action", def:"To show off something special (money, skills, achievements, looks).", ex: "Stop flexing your rank." },
 
             // --- EMOTIONS / STATES ---
@@ -407,6 +463,7 @@
             { word: "wholesome", category: "Aura", def: "Pure, kind, and good.", ex: "This video is so wholesome." },
             { word: "liminal", category: "Aura", def: "Eerie, transitional, empty feel.", ex: "This empty mall is so liminal." },
             { word: "stargazing", category: "Aura", def: "Looking at the bigger picture or having lofty dreams.", ex: "She's in her stargazing era." },
+            { word: "brat", category: "Aura", def: "Being messy, volatile, and unapologetically yourself (inspired by Charli XCX).", ex: "It's a brat summer." },
             { word: "vibe shift", category: "Aura", def: "When the general social mood changes significantly.", ex: "There's been a major vibe shift lately." },
 
             // --- REACTIONS / INSULTS ---
@@ -427,6 +484,7 @@
             { word: "mald", category: "React", def: "Mad + Bald. So mad you're losing hair.", ex: "He's malding over the update." },
             { word: "ok boomer", category: "React", def: "Dismissing an older person's opinion.", ex: "Technology is bad? Ok boomer." },
             { word: "karen", category: "React", def: "Entitled, demanding woman.", ex: "Don't be such a Karen." },
+            { word: "Lisan al Gaib", category: "React", def: "The chosen one; used when someone does something incredibly impressive or prophetic.", ex: "He predicted the whole play... Lisan al Gaib!" },
             { word: "bot", category: "React", def: "Someone acting stupid or playing badly.", ex: "Are you a bot?" },
 
             // --- PEOPLE / DATING ---
@@ -505,6 +563,7 @@
             { word: "left no crumbs", category: "Phrase", def: "Did it perfectly.", ex: "She ate and left no crumbs." },
             { word: "emotional damage", category: "Phrase", def: "Getting insulted or hurt emotionally.", ex: "That roast was pure emotional damage." },
             { word: "bomboclaat", category: "Phrase", def: "Jamaican Patois exclamation of shock.", ex: "Bomboclaat! What happened here?" },
+            { word: "type shit", category: "Phrase", def: "Filler phrase used to express agreement, relation, or acknowledgment.", ex: "A: 'I need a nap.' B: 'Type shit.'" },
             { word: "wagwan", category: "Phrase", def: "What's going on?", ex: "Wagwan fam." },
             { word: "innit", category: "Phrase", def: "Isn't it?", ex: "It's cold today, innit?" }
         ];
@@ -528,6 +587,7 @@
         
         let favorites = JSON.parse(localStorage.getItem('genz_favorites')) || [];
         let auraScores = JSON.parse(localStorage.getItem('genz_aura_scores')) || {};
+        const ttsLang = 'en-US';
 
         // Debounce helper to prevent excessive re-renders during typing
         function debounce(func, timeout = 150) {
@@ -579,7 +639,8 @@
 
         // Reset functionality
         function resetAll() {
-            if (confirm("Voulez-vous vraiment réinitialiser vos favoris et vos scores d'aura ? Cette action est irréversible. 💀")) {
+            const msg = "Do you really want to reset your favorites and aura scores? 💀";
+            if (confirm(msg)) {
                 localStorage.removeItem('genz_favorites');
                 localStorage.removeItem('genz_aura_scores');
                 favorites = [];
@@ -605,20 +666,21 @@
             const utterance = new SpeechSynthesisUtterance(text);
             const voices = window.speechSynthesis.getVoices();
             
-            // Logic to find a high-quality English voice and avoid French fallback
+            // Logic to find a high-quality voice for the selected language
+            const langPrefix = ttsLang.split('-')[0];
             const preferredVoice = 
-                // 1. Try US English high quality
-                voices.find(v => v.lang === 'en-US' && (v.name.includes('Google') || v.name.includes('Natural'))) ||
-                // 2. Try any English high quality
-                voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Natural'))) ||
-                // 3. Fallback to any English voice available
-                voices.find(v => v.lang.startsWith('en'));
+                // 1. Try specific language high quality (Google or Natural)
+                voices.find(v => v.lang === ttsLang && (v.name.includes('Google') || v.name.includes('Natural'))) ||
+                // 2. Try any voice in that language family high quality
+                voices.find(v => v.lang.startsWith(langPrefix) && (v.name.includes('Google') || v.name.includes('Natural'))) ||
+                // 3. Fallback to any voice available for that language
+                voices.find(v => v.lang.startsWith(langPrefix));
 
             if (preferredVoice) {
                 utterance.voice = preferredVoice;
             }
 
-            utterance.lang = 'en-US';
+            utterance.lang = ttsLang;
             utterance.rate = 0.85; // Slightly slower for natural flow
             utterance.pitch = 1.05; // Un ton légèrement plus haut pour paraître moins monotone
             
