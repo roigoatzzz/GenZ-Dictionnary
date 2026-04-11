@@ -6,10 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Gen Z & Brainrot Bible 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Importing Syne (Vibey headers) and Outfit (Clean body) */
-        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700&family=Syne:wght@400;700;800&display=swap');
-
         :root {
             --bg-color: #050505;
             --text-main: #ededed;
@@ -54,6 +54,11 @@
             backdrop-filter: blur(10px);
             border: 1px solid var(--card-border);
             transition: all 0.3s ease;
+        }
+        
+        .slang-card {
+            content-visibility: auto;
+            contain-intrinsic-size: 1px 200px;
         }
 
         body.light-mode .glass {
@@ -134,6 +139,18 @@
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
+
+        .copy-toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 99px;
+            z-index: 100;
+        }
     </style>
 </head>
 
@@ -165,17 +182,25 @@
         <p class="text-lg opacity-80" style="color: var(--text-muted)">The 2026 Core Edition. <span
                 id="wordCountDisplay">Loading...</span></p>
 
-        <div class="mt-8 flex flex-col md:flex-row gap-4 justify-center">
+        <div class="mt-8 flex flex-col md:flex-row gap-3 justify-center items-center">
             <input type="text" id="searchInput" placeholder="Search for a term or meaning..."
                 class="search-input border rounded-full px-6 py-4 w-full md:w-96 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all font-medium">
-            <button onclick="randomWord()"
-                class="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-full font-bold transition-all shadow-lg shadow-purple-500/20 active:scale-95">
-                Random Term
-            </button>
+            <div class="flex gap-2 w-full md:w-auto">
+                <button onclick="randomWord()"
+                    class="flex-1 md:flex-none bg-purple-600 hover:bg-purple-700 text-white px-6 py-4 rounded-full font-bold transition-all shadow-lg shadow-purple-500/20 active:scale-95 text-sm">
+                    Random Term
+                </button>
+                <button onclick="resetAll()"
+                    class="bg-red-500/10 hover:bg-red-500/20 text-red-500 border border-red-500/30 px-4 py-4 rounded-full font-bold transition-all active:scale-95 text-sm" title="Reset all data">
+                    Reset Lore
+                </button>
+            </div>
         </div>
 
         <div id="categoryFilters" class="mt-8 flex flex-wrap justify-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
             <span class="category-pill active px-5 py-2 rounded-full text-sm font-medium" data-category="All">All</span>
+            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium border-red-500/20" data-category="Favorites">❤️ Favorites</span>
+            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium border-orange-500/20" data-category="Trending">🔥 Trending</span>
             <span class="category-pill px-5 py-2 rounded-full text-sm font-medium"
                 data-category="Acronym">Acronyms</span>
             <span class="category-pill px-5 py-2 rounded-full text-sm font-medium" data-category="Core">Core</span>
@@ -191,6 +216,14 @@
             <span class="category-pill px-5 py-2 rounded-full text-sm font-medium" data-category="Phrase">Phrases</span>
         </div>
     </header>
+
+    <!-- Hall of Fame Section -->
+    <section id="hallOfFame" class="max-w-4xl mx-auto mb-12 hidden">
+        <div class="glass p-6 rounded-3xl border-yellow-500/30 flex flex-col items-center gap-4">
+            <h3 class="text-xl font-bold text-yellow-500 flex items-center gap-2">🏆 AURA LEADERS</h3>
+            <div id="leaderboardContent" class="flex flex-wrap justify-center gap-4 text-sm font-bold"></div>
+        </div>
+    </section>
 
     <main class="max-w-7xl mx-auto pb-20">
         <div id="dictionaryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -295,6 +328,7 @@
             { word: "mewing", category: "Brainrot", def: "Tongue posture technique to define jawline. Usually signaled by 'shhh' finger.", ex: "Can't talk, I'm mewing." },
             { word: "looksmaxxing", category: "Brainrot", def: "Obsessively trying to improve physical appearance.", ex: "He's been looksmaxxing for 6 months." },
             { word: "mog / mogged", category: "Brainrot", def: "To dominate someone physically or visually (look better than them).", ex: "He got mogged by the guy next to him." },
+            { word: "mogger", category: "Brainrot", def: "A person who dominates others visually or physically; one who mogs.", ex: "The main character is a total mogger.", date: "2026-04-11" },
             { word: "edge / edging", category: "Brainrot", def: "Stopping just before completion (often used for suspense/brainrot context).", ex: "I'm edging my limit right now." },
             { word: "baby gronk", category: "Brainrot", def: "Viral football kid personality.", ex: "Baby Gronk rizzing up Livvy Dunne." },
             { word: "grimace shake", category: "Brainrot", def: "Viral trend involving the purple McDonald's shake.", ex: "Happy birthday Grimace!" },
@@ -410,6 +444,7 @@
             { word: "bestie", category: "People", def: "Best friend (used loosely).", ex: "Bestie, you won't believe this." },
             { word: "mutuals / moots", category: "People", def: "People who follow each other on social media.", ex: "One of my moots posted this." },
             { word: "oomf", category: "People", def: "One Of My Followers.", ex: "Oomf said I look good." },
+            { word: "unc", category: "People", def: "Short for Uncle. Used for an older man, often jokingly implying he's past his prime or out of touch.", ex: "Unc is really out here trying to use TikTok.", date: "2026-04-11" },
             { word: "blud", category: "People", def: "Bro/Guy (UK slang).", ex: "What is blud doing?" },
             { word: "mandem", category: "People", def: "Group of friends/men (UK slang).", ex: "Out with the mandem." },
             { word: "roadman", category: "People", def: "Tough guy archetype (UK slang).", ex: "He thinks he's a roadman." },
@@ -474,17 +509,38 @@
             { word: "innit", category: "Phrase", def: "Isn't it?", ex: "It's cold today, innit?" }
         ];
 
+        // Pre-process search strings to improve performance
+        const processedData = slangData.map((item, index) => ({
+            ...item,
+            index: index, // Preserve original array position
+            searchKey: `${item.word.toLowerCase()} ${item.def.toLowerCase()}`,
+            timestamp: item.date ? new Date(item.date).getTime() : index // Use date if exists, else use index
+        }));
+
         const grid = document.getElementById('dictionaryGrid');
         const searchInput = document.getElementById('searchInput');
-        const categoryPills = document.querySelectorAll('.category-pill');
+        const categoryContainer = document.getElementById('categoryFilters');
         const countDisplay = document.getElementById('wordCountDisplay');
         const moonIcon = document.getElementById('moon-icon');
         const sunIcon = document.getElementById('sun-icon');
+        const leaderboard = document.getElementById('leaderboardContent');
         let currentCategory = 'All';
+        
+        let favorites = JSON.parse(localStorage.getItem('genz_favorites')) || [];
+        let auraScores = JSON.parse(localStorage.getItem('genz_aura_scores')) || {};
 
-        // Set the actual count
+        // Debounce helper to prevent excessive re-renders during typing
+        function debounce(func, timeout = 150) {
+            let timer;
+            return (...args) => {
+                clearTimeout(timer);
+                timer = setTimeout(() => {
+                    func.apply(this, args);
+                }, timeout);
+            };
+        }
 
-
+        // Toggle Theme
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             const isLight = document.body.classList.contains('light-mode');
@@ -498,26 +554,184 @@
             }
         }
 
-        function renderCards() {
-            const searchTerm = searchInput.value.toLowerCase();
-
-            const filtered = slangData.filter(item => {
-                const matchesSearch = item.word.toLowerCase().includes(searchTerm) ||
-                    item.def.toLowerCase().includes(searchTerm);
-
-                const matchesCategory = currentCategory === 'All' || item.category === currentCategory;
-
-                return matchesSearch && matchesCategory;
+        // Copy functionality
+        function copyTerm(word, definition) {
+            const text = `${word}: ${definition}`;
+            navigator.clipboard.writeText(text).then(() => {
+                const toast = document.createElement('div');
+                toast.className = 'copy-toast font-bold shadow-xl animate-bounce';
+                toast.innerText = 'Copied to clipboard! 📋';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 2000);
             });
+        }
 
-            // Update Dynamic Counter
-            if (filtered.length === slangData.length) {
-                countDisplay.innerHTML = `${slangData.length} terms archived.`;
+        // Favorite functionality
+        function toggleFavorite(word) {
+            if (favorites.includes(word)) {
+                favorites = favorites.filter(fav => fav !== word);
             } else {
-                countDisplay.innerHTML = `Showing ${filtered.length} of ${slangData.length} terms.`;
+                favorites.push(word);
+            }
+            localStorage.setItem('genz_favorites', JSON.stringify(favorites));
+            renderCards();
+        }
+
+        // Reset functionality
+        function resetAll() {
+            if (confirm("Voulez-vous vraiment réinitialiser vos favoris et vos scores d'aura ? Cette action est irréversible. 💀")) {
+                localStorage.removeItem('genz_favorites');
+                localStorage.removeItem('genz_aura_scores');
+                favorites = [];
+                auraScores = {};
+                searchInput.value = '';
+                currentCategory = 'All';
+                categoryContainer.querySelectorAll('.category-pill').forEach(p => {
+                    p.classList.toggle('active', p.getAttribute('data-category') === 'All');
+                });
+                renderCards();
+            }
+        }
+
+        // Warm up the voices list (required for some browsers)
+        window.speechSynthesis.getVoices();
+
+        // Text-to-Speech functionality
+        function speakTerm(text, btn) {
+            const isAlreadySpeaking = btn.classList.contains('animate-pulse');
+            window.speechSynthesis.cancel();
+            if (isAlreadySpeaking) return;
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voices = window.speechSynthesis.getVoices();
+            
+            // Logic to find a high-quality English voice and avoid French fallback
+            const preferredVoice = 
+                // 1. Try US English high quality
+                voices.find(v => v.lang === 'en-US' && (v.name.includes('Google') || v.name.includes('Natural'))) ||
+                // 2. Try any English high quality
+                voices.find(v => v.lang.startsWith('en') && (v.name.includes('Google') || v.name.includes('Natural'))) ||
+                // 3. Fallback to any English voice available
+                voices.find(v => v.lang.startsWith('en'));
+
+            if (preferredVoice) {
+                utterance.voice = preferredVoice;
             }
 
-            grid.innerHTML = '';
+            utterance.lang = 'en-US';
+            utterance.rate = 0.85; // Slightly slower for natural flow
+            utterance.pitch = 1.05; // Un ton légèrement plus haut pour paraître moins monotone
+            
+            utterance.onstart = () => btn.classList.add('text-purple-500', 'animate-pulse', 'opacity-100');
+            utterance.onend = () => btn.classList.remove('text-purple-500', 'animate-pulse', 'opacity-100');
+            utterance.onerror = () => btn.classList.remove('text-purple-500', 'animate-pulse', 'opacity-100');
+
+            window.speechSynthesis.speak(utterance);
+        }
+        // Hall of Fame Update
+        function updateHallOfFame() {
+            const topAura = Object.entries(auraScores)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 3)
+                .filter(([,score]) => score !== 0);
+
+            document.getElementById('hallOfFame').classList.toggle('hidden', topAura.length === 0);
+            leaderboard.innerHTML = topAura.map(([word, score], i) => `
+                <div class="bg-white/5 px-4 py-2 rounded-full border border-yellow-500/20">
+                    <span class="text-yellow-500">#${i+1}</span> ${word} (${score > 0 ? '+' : ''}${score})
+                </div>
+            `).join('');
+        }
+
+        // Aura functionality
+        function changeAura(word, delta) {
+            auraScores[word] = (auraScores[word] || 0) + delta;
+            localStorage.setItem('genz_aura_scores', JSON.stringify(auraScores));
+            renderCards();
+        }
+
+        // Update URL to make searches shareable
+        function updateURL(term, category) {
+            const url = new URL(window.location);
+            if (term) url.searchParams.set('q', term);
+            else url.searchParams.delete('q');
+
+            if (category && category !== 'All') url.searchParams.set('cat', category);
+            else url.searchParams.delete('cat');
+
+            window.history.replaceState({}, '', url);
+        }
+
+        // Helper to highlight matching text
+        function highlightMatch(text, query) {
+            if (!query) return text;
+            const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+            return text.replace(regex, '<mark class="bg-purple-500/40 text-inherit p-0 rounded-sm">$1</mark>');
+        }
+
+        // Scoring function for fuzzy search relevance
+        function getRelevanceScore(query, item) {
+            const word = item.word.toLowerCase();
+            const key = item.searchKey;
+            
+            if (word === query) return 100; // Exact match
+            if (word.startsWith(query)) return 80; // Starts with query
+            if (word.includes(query)) return 60; // Word contains query
+            if (key.includes(query)) return 40; // Definition contains query
+            
+            // Character-by-character fuzzy match
+            let i = 0, j = 0;
+            while (i < query.length && j < key.length) {
+                if (query[i] === key[j]) i++;
+                j++;
+            }
+            return i === query.length ? 10 : 0;
+        }
+
+        function renderCards() {
+            const searchTerm = searchInput.value.toLowerCase();
+            updateURL(searchTerm, currentCategory);
+            
+            const filtered = processedData
+                .map(item => ({ ...item, score: searchTerm ? getRelevanceScore(searchTerm, item) : 1 }))
+                .filter(item => {
+                    const matchesSearch = item.score > 0;
+                    let matchesCategory = currentCategory === 'All' || currentCategory === 'Trending' || item.category === currentCategory;
+                    
+                    if (currentCategory === 'Favorites') {
+                        matchesCategory = favorites.includes(item.word);
+                    }
+                    
+                    return matchesSearch && matchesCategory;
+                })
+                .sort((a, b) => {
+                    // If we are in trending and not actively searching, sort by timestamp
+                    if (currentCategory === 'Trending' && !searchTerm) {
+                        return b.timestamp - a.timestamp;
+                    }
+                    return b.score - a.score; // Otherwise sort by search relevance
+                });
+
+            countDisplay.textContent = filtered.length === slangData.length 
+                ? `${slangData.length} terms archived.` 
+                : `Showing ${filtered.length} of ${slangData.length} terms.`;
+
+            updateHallOfFame();
+
+            // Handle empty state
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full py-20 text-center opacity-50">
+                        <p class="text-4xl mb-4">💀</p>
+                        <p class="text-xl font-bold">No rizz found. You're tweaking.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // Use DocumentFragment for high-performance DOM batching
+            const fragment = document.createDocumentFragment();
+            
             filtered.forEach(item => {
                 let tagClass = 'text-purple-400 border-purple-500/30';
                 if (item.category === 'Acronym') tagClass = 'text-pink-400 border-pink-500/30';
@@ -526,50 +740,116 @@
                 if (item.category === 'Gaming') tagClass = 'text-blue-400 border-blue-500/30';
                 if (item.category === 'Phrase') tagClass = 'text-yellow-400 border-yellow-500/30';
 
+                const isFav = favorites.includes(item.word);
+                const favClass = isFav ? 'text-red-500 fill-red-500 opacity-100' : 'opacity-40 hover:opacity-100';
+
+                const aura = auraScores[item.word] || 0;
+                const auraColor = aura >= 0 ? 'text-green-500' : 'text-red-500';
+
                 const card = document.createElement('div');
                 card.className = 'glass slang-card p-6 rounded-3xl glow-hover flex flex-col justify-between';
                 card.innerHTML = `
                     <div>
-                        <div class="flex justify-between items-start mb-4">
-                            <h2 class="text-2xl font-bold break-words pr-2" style="font-family: 'Syne', sans-serif;">${item.word}</h2>
+                        <div class="flex justify-between items-start mb-2">
+                            <h2 class="text-2xl font-bold break-all pr-2">
+                                ${highlightMatch(item.word, searchTerm)}
+                            </h2>
+                            <div class="flex gap-1">
+                                <button onclick="speakTerm('${item.word.replace(/'/g, "\\'")}', this)" class="opacity-40 hover:opacity-100 transition-opacity p-1" title="Pronounce">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                                </button>
+                                <button onclick="toggleFavorite('${item.word.replace(/'/g, "\\'")}')" class="${favClass} transition-all p-1" title="Favorite">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l8.84-8.84 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                                </button>
+                                <button onclick="copyTerm('${item.word.replace(/'/g, "\\'")}', '${item.def.replace(/'/g, "\\'")}')" class="opacity-40 hover:opacity-100 transition-opacity p-1" title="Copy Definition">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mb-4">
                             <span class="text-[10px] font-bold uppercase tracking-widest px-2 py-1 bg-white/10 rounded-md border ${tagClass} whitespace-nowrap">
                                 ${item.category}
                             </span>
                         </div>
-                        <p class="mb-4 leading-relaxed text-sm md:text-base opacity-90">${item.def}</p>
+                        <p class="mb-4 leading-relaxed text-sm md:text-base opacity-90">
+                            ${highlightMatch(item.def, searchTerm)}
+                        </p>
                     </div>
-                    <div class="mt-4 pt-4 border-t" style="border-color: var(--card-border)">
-                        <p class="text-xs italic opacity-70">"${item.ex}"</p>
+                    <div class="mt-4 pt-4 border-t flex justify-between items-center" style="border-color: var(--card-border)">
+                        <p class="text-xs italic opacity-70 max-w-[60%]">"${item.ex}"</p>
+                        <div class="flex items-center gap-2 bg-black/20 rounded-full px-3 py-1 border border-white/5">
+                            <button onclick="changeAura('${item.word.replace(/'/g, "\\'")}', -100)" class="hover:scale-125 transition-transform text-xs">📉</button>
+                            <span class="text-[10px] font-black tracking-tighter ${auraColor}">
+                                ${aura > 0 ? '+' : ''}${aura} AURA
+                            </span>
+                            <button onclick="changeAura('${item.word.replace(/'/g, "\\'")}', 100)" class="hover:scale-125 transition-transform text-xs">📈</button>
+                        </div>
                     </div>
                 `;
-                grid.appendChild(card);
+                fragment.appendChild(card);
             });
+
+            grid.innerHTML = '';
+            grid.appendChild(fragment);
         }
 
-        searchInput.addEventListener('input', renderCards);
+        // Optimized event listeners
+        searchInput.addEventListener('input', debounce(renderCards));
 
-        categoryPills.forEach(pill => {
-            pill.addEventListener('click', () => {
-                categoryPills.forEach(p => p.classList.remove('active'));
-                pill.classList.add('active');
-                currentCategory = pill.getAttribute('data-category');
-                renderCards();
-            });
+        // Use event delegation for category filtering
+        categoryContainer.addEventListener('click', (e) => {
+            const pill = e.target.closest('.category-pill');
+            if (!pill) return;
+
+            categoryContainer.querySelectorAll('.category-pill').forEach(p => p.classList.remove('active'));
+            pill.classList.add('active');
+            currentCategory = pill.getAttribute('data-category');
+            renderCards();
         });
 
         function randomWord() {
             const random = slangData[Math.floor(Math.random() * slangData.length)];
             searchInput.value = random.word.split(' /')[0];
             currentCategory = 'All';
-            categoryPills.forEach(p => p.classList.remove('active'));
-            document.querySelector('[data-category="All"]').classList.add('active');
+            categoryContainer.querySelectorAll('.category-pill').forEach(p => {
+                p.classList.toggle('active', p.getAttribute('data-category') === 'All');
+            });
             renderCards();
         }
 
-        renderCards();
+        // Handle browser Back/Forward buttons
+        window.addEventListener('popstate', () => {
+            const params = new URLSearchParams(window.location.search);
+            const query = params.get('q') || '';
+            const cat = params.get('cat') || 'All';
+
+            searchInput.value = query;
+            currentCategory = cat;
+
+            categoryContainer.querySelectorAll('.category-pill').forEach(p => {
+                p.classList.toggle('active', p.getAttribute('data-category') === cat);
+            });
+
+            renderCards();
+        });
+
+        // Initialize from URL params if they exist
+        window.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const query = params.get('q');
+            const cat = params.get('cat');
+
+            if (query) searchInput.value = query;
+            if (cat) {
+                currentCategory = cat;
+                categoryContainer.querySelectorAll('.category-pill').forEach(p => {
+                    p.classList.toggle('active', p.getAttribute('data-category') === cat);
+                });
+            }
+            renderCards();
+        });
     </script>
 </body>
 
 
 </html>
-
