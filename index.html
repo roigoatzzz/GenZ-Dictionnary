@@ -152,8 +152,17 @@
             z-index: 100;
         }
 
+        kbd {
+            font-size: 0.7rem;
+            padding: 1px 5px;
+            background: var(--pill-bg);
+            border: 1px solid var(--pill-border);
+            border-radius: 4px;
+            color: var(--text-muted);
+        }
+
         mark {
-            background: rgba(168, 85, 247, 0.4);
+            background: rgba(168, 85, 247, 0.35);
             color: inherit;
             padding: 0 2px;
             border-radius: 2px;
@@ -192,6 +201,7 @@
         <div class="mt-8 flex flex-col md:flex-row gap-3 justify-center items-center">
             <input type="text" id="searchInput" placeholder="Search for a term or meaning..."
                 class="search-input border rounded-full px-6 py-4 w-full md:w-96 focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all font-medium">
+            <p class="text-xs opacity-40 mt-1 md:hidden text-center">Press <kbd class="font-mono bg-white/10 px-1 rounded">/</kbd> to focus · <kbd class="font-mono bg-white/10 px-1 rounded">Esc</kbd> to clear</p>
             <div class="flex gap-2 w-full md:w-auto">
                 <button onclick="randomWord()"
                     class="flex-1 md:flex-none bg-purple-600 hover:bg-purple-700 text-white px-6 py-4 rounded-full font-bold transition-all shadow-lg shadow-purple-500/20 active:scale-95 text-sm">
@@ -207,7 +217,7 @@
         <div id="categoryFilters" class="mt-8 flex flex-wrap justify-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
             <span class="category-pill active px-5 py-2 rounded-full text-sm font-medium" data-category="All">All</span>
             <span class="category-pill px-5 py-2 rounded-full text-sm font-medium border-red-500/20" data-category="Favorites">❤️ Favorites</span>
-            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium border-orange-500/20" data-category="Trending">🔥 Trending</span>
+            <span class="category-pill px-5 py-2 rounded-full text-sm font-medium border-orange-500/20" data-category="Trending">🔥 New Drops</span>
             <span class="category-pill px-5 py-2 rounded-full text-sm font-medium"
                 data-category="Acronym">Acronyms</span>
             <span class="category-pill px-5 py-2 rounded-full text-sm font-medium" data-category="Core">Core</span>
@@ -224,7 +234,20 @@
         </div>
     </header>
 
-    <!-- Hall of Fame Section -->
+    <!-- Word of the Day -->
+    <div id="wordOfDay" class="max-w-4xl mx-auto mb-6 hidden">
+        <div class="glass p-5 rounded-3xl border border-purple-500/20 flex flex-col md:flex-row items-start md:items-center gap-3">
+            <span class="text-xs font-black uppercase tracking-widest text-purple-400 whitespace-nowrap">✨ Word of the Day</span>
+            <div class="flex-1">
+                <span id="wodWord" class="font-bold text-lg"></span>
+                <span class="opacity-60 mx-2">—</span>
+                <span id="wodDef" class="text-sm opacity-80"></span>
+            </div>
+            <button onclick="searchWOD()" class="text-xs text-purple-400 hover:text-purple-300 transition-colors whitespace-nowrap font-semibold">See card →</button>
+        </div>
+    </div>
+
+
     <section id="hallOfFame" class="max-w-4xl mx-auto mb-12 hidden">
         <div class="glass p-6 rounded-3xl border-yellow-500/30 flex flex-col items-center gap-4">
             <h3 class="text-xl font-bold text-yellow-500 flex items-center gap-2">🏆 AURA LEADERS</h3>
@@ -238,8 +261,23 @@
         </div>
     </main>
 
+    <!-- Custom Reset Modal -->
+    <div id="resetModal" class="fixed inset-0 z-[200] flex items-center justify-center hidden">
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" onclick="closeResetModal()"></div>
+        <div class="glass relative rounded-3xl p-8 max-w-sm mx-4 text-center border border-red-500/30 shadow-2xl">
+            <p class="text-4xl mb-4">💀</p>
+            <h3 class="text-xl font-bold mb-2">Reset all the lore?</h3>
+            <p class="text-sm opacity-60 mb-6">This will wipe your favorites and aura scores. No cap, this is permanent.</p>
+            <div class="flex gap-3 justify-center">
+                <button onclick="closeResetModal()" class="px-6 py-3 rounded-full border font-bold text-sm transition-all hover:bg-white/5" style="border-color: var(--card-border)">Nah, keep it</button>
+                <button onclick="confirmReset()" class="px-6 py-3 rounded-full bg-red-500 hover:bg-red-600 text-white font-bold text-sm transition-all active:scale-95">Yeet it all</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="text-center text-sm pb-10 opacity-60" style="color: var(--text-muted)">
         <p>The streets never forget. 2026 Verified Data.</p>
+        <p class="mt-2 text-xs hidden md:block">Press <kbd>/</kbd> to search · <kbd>Esc</kbd> to clear</p>
     </footer>
 
     <script>
@@ -280,13 +318,6 @@
             },
             { word: "idk / idc", category: "Acronym", def: "I Don't Know / I Don't Care.", ex: "Idc what she says about me." },
             { 
-                word: "rizz", category: "Brainrot", 
-                def: "Charisma, specifically in romantic pursuit.", 
-                ex: "Bro has negative rizz.",
-                defFr: "Charisme, spécifiquement dans la séduction.",
-                exFr: "Le frérot a un rizz négatif."
-            },
-            { 
                 word: "unc", category: "People", 
                 def: "Short for Uncle. Used for an older man, often jokingly implying he's past his prime.", 
                 ex: "Unc is really out here trying to use TikTok.",
@@ -326,7 +357,7 @@
             { word: "bro", category: "Core", def: "Universal address for anyone (regardless of gender).", ex: "Bro thinks he's the main character." },
             { word: "deadass", category: "Core", def: "Seriously / For real.", ex: "I'm deadass about to quit." },
             { word: "lowkey / highkey", category: "Core", def: "Secretly / Openly or subtly / intensely.", ex: "I lowkey like him but highkey hate his shoes." },
-            { word: "sus", category: "Core", def: "Suspicious. Short for 'suspect'.", ex: "That link looks xus, don't click it." },
+            { word: "sus", category: "Core", def: "Suspicious. Short for 'suspect'.", ex: "That link looks sus, don't click it." },
             { word: "cooked", category: "Core", def: "In trouble, doomed, or mentally exhausted.", ex: "If I miss this bus I'm cooked." },
             { word: "cringe", category: "Core", def: "Second-hand embarrassment.", ex: "The joke was so cringe I couldn't look." },
             { word: "based", category: "Core", def: "Being yourself and not caring what people think; a bold, true opinion.", ex: "Truly based take." },
@@ -376,7 +407,7 @@
             { word: "beta", category: "Brainrot", def: "Weak or submissive (ironic).", ex: "Stop being such a beta." },
             { word: "uncanny", category: "Brainrot", def: "Disturbing or creepy in a way that feels 'off'.", ex: "The Mr. Incredible uncanny meme." },
             { word: "brainrot", category: "Brainrot", def: "Content so loud and senseless it feels like your brain is rotting.", ex: "I've been scrolling brainrot for 2 hours." },
-            { word: "ai slop", category: "Brainrot", def: "Low-quality, mass-produced AI content flooding social feeds.", ex: "My Facebook feed is just AI slop now." },
+            { word: "ai slop", category: "Brainrot", def: "Low-quality, mass-produced AI content flooding social feeds.", ex: "My Facebook feed is just AI slop now.", date: "2026-03-20" },
             { word: "noise", category: "Brainrot", def: "Irrelevant or low-value information; chaos used for humor.", ex: "That video was just pure noise." },
             { word: "slop", category: "Brainrot", def: "Generic, low-effort content designed just to get views.", ex: "Feeding the timeline with daily slop." },
             { word: "mewing", category: "Brainrot", def: "Tongue posture technique to define jawline. Usually signaled by 'shhh' finger.", ex: "Can't talk, I'm mewing." },
@@ -509,8 +540,8 @@
             { word: "chav", category: "People", def: "UK subculture stereotype.", ex: "Proper chav behavior." },
             { word: "eshay", category: "People", def: "Australian youth subculture (mullets/sportswear).", ex: "Look at those eshays." },
             { word: "zoomer", category: "People", def: "Member of Gen Z.", ex: "Typical zoomer humor." },
-            { word: "zalpha", category: "People", def: "Cusp generation between Z and Alpha.", ex: "My little sister is a Zalpha." },
-            { word: "ipad kid", category: "People", def: "Child raised by screens, lacks attention span.", ex: "Stop screaming, you iPad kid." },
+            { word: "zalpha", category: "People", def: "Cusp generation between Z and Alpha.", ex: "My little sister is a Zalpha.", date: "2026-03-15" },
+            { word: "ipad kid", category: "People", def: "Child raised by screens, lacks attention span.", ex: "Stop screaming, you iPad kid.", date: "2026-02-10" },
             { word: "Normie", category: "People", def: "A regular, mainstream person.", ex: "That joke is for normies." },
 
             // --- GAMING / STREAM ---
@@ -536,7 +567,7 @@
             { word: "pepega", category: "Gaming", def: "Stupid/Clueless (Twitch emote).", ex: "He missed the jump, Pepega." },
             { word: "kek", category: "Gaming", def: "LOL (World of Warcraft origin).", ex: "Kek w." },
             { word: "f", category: "Gaming", def: "Press F to pay respects.", ex: "Can we get an F in the chat?" },
-            { word: "glitch", category: "Gaming" , def: " A bug appears in the game.", ex: " Fornite has a glitch on the homepage." },
+            { word: "glitch", category: "Gaming" , def: "A bug appears in the game.", ex: "Fortnite has a glitch on the homepage." },
 
             // --- PHRASES ---
             { word: "it's giving ___", category: "Phrase", def: "It has the vibe of / It reminds me of.", ex: "It's giving 90s fashion." },
@@ -587,7 +618,7 @@
         
         let favorites = JSON.parse(localStorage.getItem('genz_favorites')) || [];
         let auraScores = JSON.parse(localStorage.getItem('genz_aura_scores')) || {};
-        const ttsLang = 'en-US';
+        let ttsLang = 'en-US';
 
         // Debounce helper to prevent excessive re-renders during typing
         function debounce(func, timeout = 150) {
@@ -604,6 +635,7 @@
         function toggleTheme() {
             document.body.classList.toggle('light-mode');
             const isLight = document.body.classList.contains('light-mode');
+            localStorage.setItem('genz_theme', isLight ? 'light' : 'dark');
 
             if (isLight) {
                 moonIcon.classList.add('hidden');
@@ -637,24 +669,87 @@
             renderCards();
         }
 
-        // Reset functionality
+        // Reset functionality — custom modal
         function resetAll() {
-            const msg = "Do you really want to reset your favorites and aura scores? 💀";
-            if (confirm(msg)) {
-                localStorage.removeItem('genz_favorites');
-                localStorage.removeItem('genz_aura_scores');
-                favorites = [];
-                auraScores = {};
-                searchInput.value = '';
-                currentCategory = 'All';
-                categoryContainer.querySelectorAll('.category-pill').forEach(p => {
-                    p.classList.toggle('active', p.getAttribute('data-category') === 'All');
-                });
-                renderCards();
-            }
+            document.getElementById('resetModal').classList.remove('hidden');
         }
 
-        // Warm up the voices list (required for some browsers)
+        function closeResetModal() {
+            document.getElementById('resetModal').classList.add('hidden');
+        }
+
+        function confirmReset() {
+            closeResetModal();
+            localStorage.removeItem('genz_favorites');
+            localStorage.removeItem('genz_aura_scores');
+            favorites = [];
+            auraScores = {};
+            searchInput.value = '';
+            currentCategory = 'All';
+            categoryContainer.querySelectorAll('.category-pill').forEach(p => {
+                p.classList.toggle('active', p.getAttribute('data-category') === 'All');
+            });
+            renderCards();
+        }
+
+        // Share card — copies a direct link to that term
+        function shareCard(word, btn) {
+            const url = new URL(window.location);
+            url.searchParams.set('q', word);
+            url.searchParams.delete('cat');
+            navigator.clipboard.writeText(url.toString()).then(() => {
+                const toast = document.createElement('div');
+                toast.className = 'copy-toast font-bold shadow-xl';
+                toast.innerText = 'Link copied! 🔗';
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 2000);
+            });
+        }
+
+        // Word of the Day — stable per calendar day
+        function initWordOfDay() {
+            const today = new Date().toDateString();
+            const seed = today.split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+            const wod = slangData[seed % slangData.length];
+            document.getElementById('wodWord').textContent = wod.word;
+            document.getElementById('wodDef').textContent = wod.def;
+            document.getElementById('wordOfDay').classList.remove('hidden');
+            window._wodWord = wod.word;
+        }
+
+        function searchWOD() {
+            searchInput.value = window._wodWord || '';
+            currentCategory = 'All';
+            categoryContainer.querySelectorAll('.category-pill').forEach(p => {
+                p.classList.toggle('active', p.getAttribute('data-category') === 'All');
+            });
+            renderCards();
+            searchInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Keyboard shortcuts: / to focus search, Esc to clear
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement !== searchInput) {
+                e.preventDefault();
+                searchInput.focus();
+            } else if (e.key === 'Escape' && document.activeElement === searchInput) {
+                searchInput.value = '';
+                renderCards();
+                searchInput.blur();
+            }
+        });
+
+        // Restore saved theme on load
+        (function restoreTheme() {
+            const saved = localStorage.getItem('genz_theme');
+            if (saved === 'light') {
+                document.body.classList.add('light-mode');
+                document.getElementById('moon-icon').classList.add('hidden');
+                document.getElementById('sun-icon').classList.remove('hidden');
+            }
+        })();
+
+
         window.speechSynthesis.getVoices();
 
         // Text-to-Speech functionality
@@ -728,7 +823,7 @@
         function highlightMatch(text, query) {
             if (!query) return text;
             const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-            return text.replace(regex, '<mark class="bg-purple-500/40 text-inherit p-0 rounded-sm">$1</mark>');
+            return text.replace(regex, '<mark>$1</mark>');
         }
 
         // Scoring function for fuzzy search relevance
@@ -826,6 +921,9 @@
                                 <button onclick="copyTerm('${item.word.replace(/'/g, "\\'")}', '${item.def.replace(/'/g, "\\'")}')" class="opacity-40 hover:opacity-100 transition-opacity p-1" title="Copy Definition">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
                                 </button>
+                                <button onclick="shareCard('${item.word.replace(/'/g, "\\'")}', this)" class="opacity-40 hover:opacity-100 transition-opacity p-1" title="Share">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                                </button>
                             </div>
                         </div>
                         <div class="mb-4">
@@ -909,6 +1007,7 @@
                 });
             }
             renderCards();
+            initWordOfDay();
         });
     </script>
 </body>
